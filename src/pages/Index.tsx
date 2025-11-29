@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Package, Search, Plus, Barcode } from "lucide-react";
+import { Package, Search, Plus, Barcode, BarChart3 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -103,10 +104,18 @@ const Index = () => {
                 <p className="text-sm text-muted-foreground">Quét mã vạch và quản lý kho</p>
               </div>
             </div>
-            <Button onClick={() => setIsAddDialogOpen(true)} className="gap-2">
-              <Plus className="h-4 w-4" />
-              Thêm sản phẩm
-            </Button>
+            <div className="flex gap-2">
+              <Link to="/reports">
+                <Button variant="outline" className="gap-2">
+                  <BarChart3 className="h-4 w-4" />
+                  Báo cáo
+                </Button>
+              </Link>
+              <Button onClick={() => setIsAddDialogOpen(true)} className="gap-2">
+                <Plus className="h-4 w-4" />
+                Thêm sản phẩm
+              </Button>
+            </div>
           </div>
         </div>
       </header>
