@@ -7,6 +7,8 @@ import { Card } from "@/components/ui/card";
 import ScannerInput from "@/components/ScannerInput";
 import ProductList from "@/components/ProductList";
 import AddProductDialog from "@/components/AddProductDialog";
+import EditProductDialog from "@/components/EditProductDialog";
+import DeleteProductDialog from "@/components/DeleteProductDialog";
 import { toast } from "@/hooks/use-toast";
 
 export interface Product {
@@ -52,6 +54,9 @@ const Index = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const handleScan = (barcode: string) => {
     const product = products.find((p) => p.barcode === barcode);
@@ -80,6 +85,38 @@ const Index = () => {
       title: "Thành công",
       description: "Đã thêm sản phẩm mới",
     });
+  };
+
+  const handleEditProduct = (updatedProduct: Product) => {
+    setProducts(
+      products.map((p) => (p.id === updatedProduct.id ? updatedProduct : p))
+    );
+    toast({
+      title: "Cập nhật thành công",
+      description: `Đã cập nhật thông tin ${updatedProduct.name}`,
+    });
+  };
+
+  const handleDeleteProduct = () => {
+    if (selectedProduct) {
+      setProducts(products.filter((p) => p.id !== selectedProduct.id));
+      toast({
+        title: "Đã xóa",
+        description: `Đã xóa ${selectedProduct.name} khỏi hệ thống`,
+      });
+      setIsDeleteDialogOpen(false);
+      setSelectedProduct(null);
+    }
+  };
+
+  const openEditDialog = (product: Product) => {
+    setSelectedProduct(product);
+    setIsEditDialogOpen(true);
+  };
+
+  const openDeleteDialog = (product: Product) => {
+    setSelectedProduct(product);
+    setIsDeleteDialogOpen(true);
   };
 
   const filteredProducts = products.filter(
@@ -165,7 +202,11 @@ const Index = () => {
         </div>
 
         {/* Product List */}
-        <ProductList products={filteredProducts} />
+        <ProductList 
+          products={filteredProducts}
+          onEdit={openEditDialog}
+          onDelete={openDeleteDialog}
+        />
       </main>
 
       {/* Add Product Dialog */}
@@ -173,6 +214,22 @@ const Index = () => {
         open={isAddDialogOpen}
         onOpenChange={setIsAddDialogOpen}
         onAdd={handleAddProduct}
+      />
+
+      {/* Edit Product Dialog */}
+      <EditProductDialog
+        open={isEditDialogOpen}
+        onOpenChange={setIsEditDialogOpen}
+        onEdit={handleEditProduct}
+        product={selectedProduct}
+      />
+
+      {/* Delete Product Dialog */}
+      <DeleteProductDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+        onDelete={handleDeleteProduct}
+        product={selectedProduct}
       />
     </div>
   );

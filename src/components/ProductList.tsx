@@ -4,9 +4,11 @@ import type { Product } from "@/pages/Index";
 
 interface ProductListProps {
   products: Product[];
+  onEdit?: (product: Product) => void;
+  onDelete?: (product: Product) => void;
 }
 
-const ProductList = ({ products }: ProductListProps) => {
+const ProductList = ({ products, onEdit, onDelete }: ProductListProps) => {
   if (products.length === 0) {
     return (
       <div className="text-center py-12">
@@ -30,7 +32,12 @@ const ProductList = ({ products }: ProductListProps) => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard 
+            key={product.id} 
+            product={product}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
         ))}
       </div>
     </div>
