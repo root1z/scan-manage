@@ -1,13 +1,16 @@
-import { Package, Tag, TrendingUp } from "lucide-react";
+import { Package, Tag, TrendingUp, Edit, Trash2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import type { Product } from "@/pages/Index";
 
 interface ProductCardProps {
   product: Product;
+  onEdit?: (product: Product) => void;
+  onDelete?: (product: Product) => void;
 }
 
-const ProductCard = ({ product }: ProductCardProps) => {
+const ProductCard = ({ product, onEdit, onDelete }: ProductCardProps) => {
   const stockStatus = product.stock > 50 ? "success" : product.stock > 20 ? "warning" : "destructive";
   const stockLabel = product.stock > 50 ? "Còn hàng" : product.stock > 20 ? "Sắp hết" : "Gần hết";
 
@@ -28,6 +31,28 @@ const ProductCard = ({ product }: ProductCardProps) => {
                 {product.barcode}
               </p>
             </div>
+          </div>
+          <div className="flex gap-1">
+            {onEdit && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => onEdit(product)}
+              >
+                <Edit className="h-4 w-4" />
+              </Button>
+            )}
+            {onDelete && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-destructive hover:text-destructive"
+                onClick={() => onDelete(product)}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            )}
           </div>
         </div>
 
